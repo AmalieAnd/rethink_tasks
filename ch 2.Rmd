@@ -1,0 +1,74 @@
+---
+title: "Ch 2"
+author: "Amalie Lysgaard Andersen"
+date: "16/2/2019"
+output: html_document
+---
+
+
+```{r}
+# Packages
+install.packages("rstan", repos = "https://cloud.r-project.org/", dependencies = TRUE)
+install.packages("rethinking")
+
+library(pacman)
+p_load("coda", "mvtnorm", "devtools", "rstan")
+
+install.packages(c("coda","mvtnorm","devtools","loo"))
+library(devtools)
+devtools::install_github("rmcelreath/rethinking")
+p_load("rethinking")
+
+```
+
+```{r Binomial distribution}
+
+dbinom(6, size = 9, prob = 0.5)
+```
+
+```{r Grid approximation}
+
+#define grid
+p_grid <- seq(from= 0, to = 1, length.out = 20)
+
+#define prior
+prior <- rep(1,20)
+
+#compute likelihood at each value in grid
+likelihood <- dbinom(6, size = 9, prob = p_grid)
+
+#compute product of likelihood and prior
+unstd.posterior <- likelihood * prior
+
+#standardise the posterior, so it sums to 1
+posterior <- unstd.posterior / sum(unstd.posterior)
+
+#display distribution
+plot(p_grid, posterior, type ="b", xlab ="probability of water", ylab = "posterior probability")
+```
+
+```{r Quadratic approximation}
+
+library(rethinking) # notworking
+globe.qa <- map(
+  alist(
+    w ~ dbinom(9,p) , # binomial likelihood
+    p ~ dunif(0,1)    # uniform prior 
+  ) ,
+  data = list(w = 6)
+)
+
+#display summary of qudratic approximation
+precis(globe.qa)
+
+
+#Analytical calculation
+w = 6
+n = 9
+
+curve(dbeta(x, w+1, n-w+1), from = 0, to = 1)
+
+# Quadratic approximation
+curve(dnorm(x, 0.67, 0.16) , lty = 2, add = T)
+```
+

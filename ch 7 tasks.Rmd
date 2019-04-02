@@ -1,0 +1,35 @@
+---
+title: "Ch 7 tasks"
+author: "Amalie Lysgaard Andersen"
+date: "28/3/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+setwd("~/Library/Mobile Documents/com~apple~CloudDocs/4. Aarhus Universitet/4. Semester/1. Computational Modelling/rethink_tasks")
+
+```
+
+
+### Chapter 7 ####
+
+
+```{r}
+library(rethinking)
+data(rugged)
+d <- rugged
+
+# make log version of outcome
+d$log_gdp <- log( d$rgdppc_2000 )
+
+# extract countries with GDP data
+dd <- d[ complete.cases(d$rgdppc_2000) , ]
+
+# split countries into Africa and not-Africa
+d.A1 <- dd[ dd$cont_africa==1 , ] # Africa
+d.A0 <- dd[ dd$cont_africa==0 , ] # not Africa
+```
+
+
+
+
