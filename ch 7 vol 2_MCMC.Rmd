@@ -1,0 +1,45 @@
+---
+title: "Ch 7 vol 2 - MCMC"
+author: "Amalie Lysgaard Andersen"
+date: "9/4/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+pacman::p_load(rethinking, brms)
+
+setwd("~/Library/Mobile Documents/com~apple~CloudDocs/4. Aarhus Universitet/4. Semester/1. Computational Modelling/rethink_tasks")
+```
+
+```{r data}
+data(nettle)
+```
+
+### Chapter 7 (Interaction): Task 7H4
+
+
+The values in data(nettle) are data on language diversity in 74 nations. The meaning of each column is given below.
+(1) country: Name of the country
+(2) num.lang: Number of recognized languages spoken
+(3) area: Area in square kilometers
+(4) k.pop: Population, in thousands
+(5) num.stations: Number of weather stations that provided data for the next two columns (6) mean.growing.season: Average length of growing season, in months
+(7) sd.growing.season: Standard deviation of length of growing season, in months
+
+Use these data to evaluate the hypothesis that 
+#language diversity is partly a product of food security. 
+
+The notion is that, in productive ecologies, people don’t need large social networks to buffer them against risk of food shortfalls. This means ethnic groups can be smaller and more self-sufficient, leading to more languages per capita. In contrast, in a poor ecology, there is more subsistence risk, and so human societies have adapted by building larger networks of mutual obligation to provide food insurance. This in turn creates social forces that help prevent languages from diversifying.
+
+Specifically, you will try to model the number of languages per capita as the outcome variable:
+d$lang.per.cap <- d$num.lang / d$k.pop
+Use the logarithm of this new variable as your regression outcome. (A count model would be better here, but you’ll learn those later, in Chapter 10.)
+
+This problem is open ended, allowing you to decide how you address the hypotheses and the uncertain advice the modeling provides. If you think you need to use WAIC anyplace, please do. If you think you need certain priors, argue for them. If you think you need to plot predictions in a certain way, please do. Just try to honestly evaluate the main effects of both mean.growing.season and sd.growing.season, as well as their two-way interaction, as outlined in parts (a), (b), and (c) below. If you are not sure which approach to use, try several.
+    
+(a) Evaluate the hypothesis that language diversity, as measured by log(lang.per.cap), is pos- itively associated with the average length of the growing season, mean.growing.season. Consider log(area) in your regression(s) as a covariate (not an interaction). Interpret your results.
+(b) Now evaluate the hypothesis that language diversity is negatively associated with the stan- dard deviation of length of growing season, sd.growing.season. This hypothesis follows from uncertainty in harvest favoring social insurance through larger social networks and therefore fewer languages. Again, consider log(area) as a covariate (not an interaction). Interpret your results.
+(c) Finally, evaluate the hypothesis that mean.growing.season and sd.growing.season in- teract to synergistically reduce language diversity. The idea is that, in nations with longer average growing seasons, high variance makes storage and redistribution even more important than it would be otherwise. That way, people can cooperate to preserve and protect windfalls to be used during the droughts. These forces in turn may lead to greater social integration and fewer languages.
+
+
+
