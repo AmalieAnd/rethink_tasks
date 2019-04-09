@@ -27,19 +27,63 @@ The values in data(nettle) are data on language diversity in 74 nations. The mea
 (7) sd.growing.season: Standard deviation of length of growing season, in months
 
 Use these data to evaluate the hypothesis that 
-#language diversity is partly a product of food security. 
+(1) language diversity is partly a product of food security. 
 
+# Background
 The notion is that, in productive ecologies, people don’t need large social networks to buffer them against risk of food shortfalls. This means ethnic groups can be smaller and more self-sufficient, leading to more languages per capita. In contrast, in a poor ecology, there is more subsistence risk, and so human societies have adapted by building larger networks of mutual obligation to provide food insurance. This in turn creates social forces that help prevent languages from diversifying.
 
 Specifically, you will try to model the number of languages per capita as the outcome variable:
-d$lang.per.cap <- d$num.lang / d$k.pop
+#CODE: d$lang.per.cap <- d$num.lang / d$k.pop
 Use the logarithm of this new variable as your regression outcome. (A count model would be better here, but you’ll learn those later, in Chapter 10.)
+```{r creating new variable: lang.per.cap}
+nettle$lang_per_cap <- nettle$num.lang / nettle$k.pop
+nettle$log_lpc <- log(nettle$lang_per_cap)
+
+nettle$log_area <- log(nettle$area)
+```
 
 This problem is open ended, allowing you to decide how you address the hypotheses and the uncertain advice the modeling provides. If you think you need to use WAIC anyplace, please do. If you think you need certain priors, argue for them. If you think you need to plot predictions in a certain way, please do. Just try to honestly evaluate the main effects of both mean.growing.season and sd.growing.season, as well as their two-way interaction, as outlined in parts (a), (b), and (c) below. If you are not sure which approach to use, try several.
-    
-(a) Evaluate the hypothesis that language diversity, as measured by log(lang.per.cap), is pos- itively associated with the average length of the growing season, mean.growing.season. Consider log(area) in your regression(s) as a covariate (not an interaction). Interpret your results.
-(b) Now evaluate the hypothesis that language diversity is negatively associated with the stan- dard deviation of length of growing season, sd.growing.season. This hypothesis follows from uncertainty in harvest favoring social insurance through larger social networks and therefore fewer languages. Again, consider log(area) as a covariate (not an interaction). Interpret your results.
+```{r plotting}
+#ggplot(nettle)
+```
+
+
+
+(a) Evaluate the hypothesis that language diversity, as measured by log(lang.per.cap), is positively associated with the average length of the growing season, mean.growing.season. Consider log(area) in your regression(s) as a covariate (not an interaction). Interpret your results.
+```{r}
+m7.1 <- map(
+    alist(
+        log_lpc ~ dnorm( mu , sigma ) ,
+        mu <- a + bM*mean.growing.season + bA*log_area ,
+        a ~ dnorm( -5 , 3 ) ,
+        bM ~ dnorm( 6 , 2 ) ,
+        bA ~ dnorm( 13 , 1 ) ,
+        sigma ~ dunif( 0 , 3 ) ),
+    data= nettle ,
+    control=list(maxit=1e4) )
+
+precis(m7.1)
+plot(precis(m7.1))
+```
+
+(b) Now evaluate the hypothesis that language diversity is negatively associated with the standard deviation of length of growing season, sd.growing.season. This hypothesis follows from uncertainty in harvest favoring social insurance through larger social networks and therefore fewer languages. Again, consider log(area) as a covariate (not an interaction). Interpret your results.
+```{r}
+
+```
+
 (c) Finally, evaluate the hypothesis that mean.growing.season and sd.growing.season in- teract to synergistically reduce language diversity. The idea is that, in nations with longer average growing seasons, high variance makes storage and redistribution even more important than it would be otherwise. That way, people can cooperate to preserve and protect windfalls to be used during the droughts. These forces in turn may lead to greater social integration and fewer languages.
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
 
 
 
