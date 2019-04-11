@@ -23,7 +23,8 @@ The values in data(nettle) are data on language diversity in 74 nations. The mea
 (2) num.lang: Number of recognized languages spoken
 (3) area: Area in square kilometers
 (4) k.pop: Population, in thousands
-(5) num.stations: Number of weather stations that provided data for the next two columns (6) mean.growing.season: Average length of growing season, in months
+(5) num.stations: Number of weather stations that provided data for the next two columns 
+(6) mean.growing.season: Average length of growing season, in months
 (7) sd.growing.season: Standard deviation of length of growing season, in months
 
 Use these data to evaluate the hypothesis that 
@@ -50,7 +51,7 @@ This problem is open ended, allowing you to decide how you address the hypothese
 
 
 (a) Evaluate the hypothesis that language diversity, as measured by log(lang.per.cap), is positively associated with the average length of the growing season, mean.growing.season. Consider log(area) in your regression(s) as a covariate (not an interaction). Interpret your results.
-```{r}
+```{r model: mean + area}
 m7.1 <- map(
     alist(
         log_lpc ~ dnorm( mu , sigma ) ,
@@ -59,19 +60,50 @@ m7.1 <- map(
         bM ~ dnorm( 6 , 2 ) ,
         bA ~ dnorm( 13 , 1 ) ,
         sigma ~ dunif( 0 , 3 ) ),
-    data= nettle ,
+    data = nettle ,
     control=list(maxit=1e4) )
 
 precis(m7.1)
 plot(precis(m7.1))
 ```
 
+```{r model: mean }
+m7.2 <- map(
+    alist(
+        log_lpc ~ dnorm( mu , sigma ) ,
+        mu <- a + bM*mean.growing.season ,
+        a ~ dnorm( -5 , 3 ) ,
+        bM ~ dnorm( 6 , 2 ) ,
+        sigma ~ dunif( 0 , 3 ) ),
+    data = nettle ,
+    control=list(maxit=1e4) )
+
+precis(m7.2)
+plot(precis(m7.1))
+```
+
+```{r model: }
+m7.2 <- map(
+    alist(
+        log_lpc ~ dnorm( mu , sigma ) ,
+        mu <- a + bM*mean.growing.season ,
+        a ~ dnorm( -5 , 3 ) ,
+        bM ~ dnorm( 6 , 2 ) ,
+        sigma ~ dunif( 0 , 3 ) ),
+    data = nettle ,
+    control=list(maxit=1e4) )
+
+precis(m7.2)
+plot(precis(m7.1))
+```
+
+
 (b) Now evaluate the hypothesis that language diversity is negatively associated with the standard deviation of length of growing season, sd.growing.season. This hypothesis follows from uncertainty in harvest favoring social insurance through larger social networks and therefore fewer languages. Again, consider log(area) as a covariate (not an interaction). Interpret your results.
 ```{r}
 
 ```
 
-(c) Finally, evaluate the hypothesis that mean.growing.season and sd.growing.season in- teract to synergistically reduce language diversity. The idea is that, in nations with longer average growing seasons, high variance makes storage and redistribution even more important than it would be otherwise. That way, people can cooperate to preserve and protect windfalls to be used during the droughts. These forces in turn may lead to greater social integration and fewer languages.
+(c) Finally, evaluate the hypothesis that mean.growing.season and sd.growing.season interact to synergistically reduce language diversity. The idea is that, in nations with longer average growing seasons, high variance makes storage and redistribution even more important than it would be otherwise. That way, people can cooperate to preserve and protect windfalls to be used during the droughts. These forces in turn may lead to greater social integration and fewer languages.
 ```{r}
 
 ```

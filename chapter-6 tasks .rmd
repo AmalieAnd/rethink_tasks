@@ -25,8 +25,8 @@ Models
 flist <-  alist(
     height ~ dnorm(mu , sigma),
     mu <- a + b*age ,
-        a ~ dnorm( 149 , 50 ) ,
-        b ~ dnorm( 0 , 5 ) ,
+        a ~ dnorm( 149 , 50 ) ,  # 
+        b ~ dnorm( 0 , 20 ) ,
         sigma ~ dunif( 0 , 30)
   )
 
@@ -110,7 +110,7 @@ m6.6 <- rethinking::map(flist6, data = d1)
 ```{r compare models}
 (compare(models <- m6.1, m6.2, m6.3, m6.4, m6.5, m6.6 )) 
 
-#               WAIC pWAIC dWAIC weight    SE   dSE
+#               WAIC pWAIC  dWAIC  weight  SE    dSE
 #m6.4           1926.0   5.6   0.0   0.56 25.43    NA
 #m6.5           1927.5   6.4   1.4   0.28 25.34  0.97
 #m6.6           1928.5   7.7   2.5   0.16 25.08  2.56
